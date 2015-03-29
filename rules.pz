@@ -190,6 +190,7 @@ RULES
 
 [ >  Player | Crate ] -> [  >  Player | > Crate  ]
 [ action player | candlestand ] -> [ player | candle ]
+[ action player | candle ] -> [ player | candlestand ]
 
 [ no night ] -> [ night ]
 
@@ -215,21 +216,20 @@ late LEFT [ marker no night | marker night ] -> [ marker no night | no night ]
 late [ marker ] -> [ ]
 
 ( shade the edges )
-( the "border" object is there so that we can still shade light at the edges )
 
 late [ no marker no night no lightsource no shade ] -> [ marker no night no lightsource ]
 ( shade the sides that are close to the horizon )
-+ late UP [ marker | horizon ] -> [ marker shadeU | horizon ]
-+ late DOWN [ marker | horizon ] -> [ marker shadeD | horizon ]
-+ late LEFT [ marker | horizon ] -> [ marker shadeL | horizon ]
-+ late RIGHT [ marker | horizon ] -> [ marker shadeR | horizon ]
+late UP [ marker | horizon ] -> [ marker shadeU | horizon ]
+late DOWN [ marker | horizon ] -> [ marker shadeD | horizon ]
+late LEFT [ marker | horizon ] -> [ marker shadeL | horizon ]
+late RIGHT [ marker | horizon ] -> [ marker shadeR | horizon ]
 ( shade the corners )
-+ late UP [ shadeL | horizon ] -> [ shadeUL | horizon ]
-+ late DOWN [ shadeL | horizon ] -> [ shadeDL | horizon ]
-+ late UP [ shadeR | horizon ] -> [ shadeUR | horizon ]
-+ late DOWN [ shadeR | horizon ] -> [ shadeDR | horizon ]
+late UP [ shadeL | horizon ] -> [ shadeUL | horizon ]
+late DOWN [ shadeL | horizon ] -> [ shadeDL | horizon ]
+late UP [ shadeR | horizon ] -> [ shadeUR | horizon ]
+late DOWN [ shadeR | horizon ] -> [ shadeDR | horizon ]
 
-+ late [ marker ] -> [ ]
+late [ marker ] -> [ ]
 
 ( light up the walls to distinguish them )
 late [ border shade ] -> [ border ]
