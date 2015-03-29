@@ -1,0 +1,158 @@
+title Simple Block Pushing Game
+author Stephen Lavelle
+homepage www.puzzlescript.net
+
+run_rules_on_level_start
+debug
+
+========
+OBJECTS
+========
+
+Background
+LIGHTGREEN GREEN
+11111
+01111
+11101
+11111
+10111
+
+
+Target
+DarkBlue
+.....
+.000.
+.0.0.
+.000.
+.....
+
+Wall
+BROWN DARKBROWN
+00010
+11111
+01000
+11111
+00010
+
+Player
+Black Orange White Blue
+.000.
+.111.
+22222
+.333.
+.3.3.
+
+Crate
+Orange Yellow
+00000
+0...0
+0...0
+0...0
+00000
+
+night
+black
+00000
+00000
+00000
+00000
+00000
+
+candlestand
+brown white yellow
+.....
+..1..
+..1.2
+.000.
+.....
+
+candle
+brown white yellow orange
+..3..
+..1..
+..1.2
+.000.
+.....
+
+marker
+transparent
+
+=======
+LEGEND
+=======
+
+foreground = wall or player or crate or target
+night = nightCC or nightTL or nightTR or nightBL or nightBR or nightU or nightD or nightL or nightR
+lightsource = player or candle
+
+. = Background
+# = Wall
+P = Player
+* = Crate
+@ = Crate and Target
+O = Target
+| = candlestand
+
+=======
+SOUNDS
+=======
+
+Crate MOVE 36772507
+
+================
+COLLISIONLAYERS
+================
+
+Background
+Target
+Player, Wall, Crate, candle, candlestand
+night
+marker
+
+
+======
+RULES
+======
+
+
+[ >  Player | Crate ] -> [  >  Player | > Crate  ]
+[ action player | candlestand ] -> [ player | candle ]
+
+[ no nightCC ] -> [ nightCC ]
+
+( lighting for each lightsource; grouped so they don't interfere )
+
+late [ nightCC lightsource ] -> [ no nightCC marker lightsource ]
+
+late [ nightCC | marker lightsource ] -> [ marker no night | marker lightsource ]
+late [ marker lightsource ] -> [ no marker lightsource ]
+
+late UP [ marker no night | nightCC ] -> [ marker no night | marker nightCC ]
+late RIGHT [ marker no night | marker nightCC ] -> [ marker no night | no night ]
+
+late UP [ marker no night | nightCC ] -> [ marker no night | marker nightCC ]
+late LEFT [ marker no night | marker nightCC ] -> [ marker no night | no night ]
+
+late DOWN [ marker no night | nightCC ] -> [ marker no night | marker nightCC ]
+late RIGHT [ marker no night | marker nightCC ] -> [ marker no night | no night ]
+
+late DOWN [ marker no night | nightCC ] -> [ marker no night | marker nightCC ]
+late LEFT [ marker no night | marker nightCC ] -> [ marker no night | no night ]
+
+late [ marker ] -> [ ]
+
+==============
+WINCONDITIONS
+==============
+
+=======
+LEVELS
+=======
+
+........
+.|......
+........
+........
+....|...
+.P......
+........
