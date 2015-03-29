@@ -58,6 +58,71 @@ black
 00000
 00000
 
+shadeU
+#101010
+.0.0.
+0.0.0
+.....
+.....
+.....
+
+shadeD
+#101010
+.....
+.....
+.....
+.0.0.
+0.0.0
+
+shadeL
+#101010
+0....
+.0...
+0....
+.0...
+0....
+
+shadeR
+#101010
+....0
+...0.
+....0
+...0.
+....0
+
+shadeUR
+#101010
+0.0.0
+.0.0.
+....0
+...0.
+....0
+
+shadeUL
+#101010
+0.0.0
+.0.0.
+0....
+.0...
+0....
+
+shadeDR
+#101010
+....0
+...0.
+....0
+.0.0.
+0.0.0
+
+shadeDL
+#101010
+0....
+.0...
+0....
+.0.0.
+0.0.0
+
+
 candlestand
 brown white yellow
 .....
@@ -77,13 +142,23 @@ brown white yellow orange
 marker
 transparent
 
+side
+transparent
+
+corner
+transparent
+
+border
+black
+
 =======
 LEGEND
 =======
 
 foreground = wall or player or crate or target
-night = nightCC or nightTL or nightTR or nightBL or nightBR or nightU or nightD or nightL or nightR
 lightsource = player or candle
+horizon = night or border
+shade = shadeU or shadeD or shadeR or shadeL or shadeUR or shadeUL or shadeDR or shadeDL
 
 . = Background
 # = Wall
@@ -92,6 +167,7 @@ P = Player
 @ = Crate and Target
 O = Target
 | = candlestand
+x = border
 
 =======
 SOUNDS
@@ -105,9 +181,9 @@ COLLISIONLAYERS
 
 Background
 Target
-Player, Wall, Crate, candle, candlestand
-night
-marker
+Player, Wall, Crate, candle, candlestand, border
+night, shade
+marker, side, corner
 
 
 ======
@@ -118,28 +194,45 @@ RULES
 [ >  Player | Crate ] -> [  >  Player | > Crate  ]
 [ action player | candlestand ] -> [ player | candle ]
 
-[ no nightCC ] -> [ nightCC ]
+[ no night ] -> [ night ]
 
 ( lighting for each lightsource; grouped so they don't interfere )
 
-late [ nightCC lightsource ] -> [ no nightCC marker lightsource ]
+late [ night lightsource ] -> [ no night marker lightsource ]
 
-late [ nightCC | marker lightsource ] -> [ marker no night | marker lightsource ]
+late [ night | marker lightsource ] -> [ marker no night | marker lightsource ]
 late [ marker lightsource ] -> [ no marker lightsource ]
 
-late UP [ marker no night | nightCC ] -> [ marker no night | marker nightCC ]
-late RIGHT [ marker no night | marker nightCC ] -> [ marker no night | no night ]
+late UP [ marker no night | night ] -> [ marker no night | marker night ]
+late RIGHT [ marker no night | marker night ] -> [ marker no night | no night ]
 
-late UP [ marker no night | nightCC ] -> [ marker no night | marker nightCC ]
-late LEFT [ marker no night | marker nightCC ] -> [ marker no night | no night ]
+late UP [ marker no night | night ] -> [ marker no night | marker night ]
+late LEFT [ marker no night | marker night ] -> [ marker no night | no night ]
 
-late DOWN [ marker no night | nightCC ] -> [ marker no night | marker nightCC ]
-late RIGHT [ marker no night | marker nightCC ] -> [ marker no night | no night ]
+late DOWN [ marker no night | night ] -> [ marker no night | marker night ]
+late RIGHT [ marker no night | marker night ] -> [ marker no night | no night ]
 
-late DOWN [ marker no night | nightCC ] -> [ marker no night | marker nightCC ]
-late LEFT [ marker no night | marker nightCC ] -> [ marker no night | no night ]
+late DOWN [ marker no night | night ] -> [ marker no night | marker night ]
+late LEFT [ marker no night | marker night ] -> [ marker no night | no night ]
 
 late [ marker ] -> [ ]
+
+( shade the edges )
+( the "border" object is there so that we can still shade light at the edges )
+
+late [ no marker no night no lightsource no shade ] -> [ marker no night no lightsource ]
+( shade the sides that are close to the horizon )
++ late UP [ marker | horizon ] -> [ marker shadeU | horizon ]
++ late DOWN [ marker | horizon ] -> [ marker shadeD | horizon ]
++ late LEFT [ marker | horizon ] -> [ marker shadeL | horizon ]
++ late RIGHT [ marker | horizon ] -> [ marker shadeR | horizon ]
+( shade the corners )
++ late UP [ shadeL | horizon ] -> [ shadeUL | horizon ]
++ late DOWN [ shadeL | horizon ] -> [ shadeDL | horizon ]
++ late UP [ shadeR | horizon ] -> [ shadeUR | horizon ]
++ late DOWN [ shadeR | horizon ] -> [ shadeDR | horizon ]
+
++ late [ marker ] -> [ ]
 
 ==============
 WINCONDITIONS
@@ -149,10 +242,14 @@ WINCONDITIONS
 LEVELS
 =======
 
-........
-.|......
-........
-........
-....|...
-.P......
-........
+xxxxxxxxxx
+x........x
+x.|......x
+x........x
+x........x
+x....|...x
+x.P......x
+x........x
+xxxxxxxxxx
+
+
