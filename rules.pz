@@ -148,17 +148,15 @@ transparent
 corner
 transparent
 
-border
-black
-
 =======
 LEGEND
 =======
 
 foreground = wall or player or crate or target
 lightsource = player or candle
-horizon = night or border
+horizon = night
 shade = shadeU or shadeD or shadeR or shadeL or shadeUR or shadeUL or shadeDR or shadeDL
+border = wall
 
 . = Background
 # = Wall
@@ -167,7 +165,6 @@ P = Player
 @ = Crate and Target
 O = Target
 | = candlestand
-x = border
 
 =======
 SOUNDS
@@ -181,7 +178,7 @@ COLLISIONLAYERS
 
 Background
 Target
-Player, Wall, Crate, candle, candlestand, border
+Player, Wall, Crate, candle, candlestand
 night, shade
 marker, side, corner
 
@@ -234,6 +231,10 @@ late [ no marker no night no lightsource no shade ] -> [ marker no night no ligh
 
 + late [ marker ] -> [ ]
 
+( light up the walls to distinguish them )
+late [ border shade ] -> [ border ]
+
+
 ==============
 WINCONDITIONS
 ==============
@@ -242,14 +243,13 @@ WINCONDITIONS
 LEVELS
 =======
 
-xxxxxxxxxx
-x........x
-x.|......x
-x........x
-x........x
-x....|...x
-x.P......x
-x........x
-xxxxxxxxxx
-
+##########
+#...#....#
+#.|.#....#
+#...#....#
+#........#
+#....|...#
+#.P#.....#
+#..#.....#
+##########
 
