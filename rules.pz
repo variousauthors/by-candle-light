@@ -1,5 +1,5 @@
-title Simple Block Pushing Game
-author Stephen Lavelle
+title By Candle Light
+author arrogant.gamer
 homepage www.puzzlescript.net
 
 run_rules_on_level_start
@@ -122,6 +122,22 @@ shadeDL
 .0.0.
 0.0.0
 
+shadowUD
+black
+.0.0.
+0.0.0
+00000
+0.0.0
+.0.0.
+
+shadowLR
+black
+.000.
+0.0.0
+.000.
+0.0.0
+.000.
+
 
 candlestand
 brown white yellow
@@ -157,6 +173,7 @@ lightsource = player or candle
 horizon = night
 shade = shadeU or shadeD or shadeR or shadeL or shadeUR or shadeUL or shadeDR or shadeDL
 border = wall
+shadow = shadowLR or shadowUD
 
 . = Background
 # = Wall
@@ -179,7 +196,7 @@ COLLISIONLAYERS
 Background
 Target
 Player, Wall, Crate, candle, candlestand
-night, shade
+night, shade, shadow
 marker, side, corner
 
 
@@ -234,6 +251,8 @@ late [ marker ] -> [ ]
 ( light up the walls to distinguish them )
 late [ border shade ] -> [ border ]
 
+late horizontal [ shade | night | shade ] -> [ shade | shadowLR | shade ]
+late vertical [ shade | night | shade ] -> [ shade | shadowUD | shade ]
 
 ==============
 WINCONDITIONS
